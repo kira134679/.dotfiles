@@ -2,6 +2,10 @@ local is_transparent = true
 
 return {
   {
+    "rose-pine/neovim",
+    name = "rose-pine",
+  },
+  {
     "folke/tokyonight.nvim",
     opts = {
       transparent = is_transparent,
