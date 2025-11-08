@@ -20,15 +20,13 @@ return {
         function()
           is_transparent = not is_transparent
           local theme = require("tokyonight")
-          theme.setup(
-            {
-              transparent = is_transparent
-            }
-          )
+          theme.setup({
+            transparent = is_transparent,
+          })
           vim.cmd("colorscheme tokyonight")
         end,
-        desc = "Toggle Background"
-      }
-    }
+        desc = "Toggle Background",
+      },
+    },
   },
 }
