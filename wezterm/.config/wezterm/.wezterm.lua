@@ -1,6 +1,5 @@
 -- Pull in the wezterm API
 local wezterm = require("wezterm")
-local act = wezterm.action
 
 -- This will hold the configuration.
 local config = wezterm.config_builder()
@@ -8,12 +7,13 @@ local config = wezterm.config_builder()
 -- This is where you actually apply your config choices.
 
 -- For example, changing the initial geometry for new windows:
-config.initial_cols = 70
-config.initial_rows = 16
+config.initial_cols = 80
+config.initial_rows = 24
 
 -- or, changing the font size and color scheme.
 config.window_background_opacity = 0.9
 config.font_size = 10
+config.use_fancy_tab_bar = false
 config.color_scheme = "Tokyo Night"
 config.font = wezterm.font_with_fallback({
   {
@@ -23,65 +23,37 @@ config.font = wezterm.font_with_fallback({
   },
 })
 
-config.keys = {
-  -- split pane in the the specified direction
-  {
-    key = "h",
-    mods = "CTRL",
-    action = act.SplitPane({
-      direction = "Left",
-      size = { Percent = 50 },
-    }),
-  },
-  {
-    key = "j",
-    mods = "CTRL",
-    action = act.SplitPane({
-      direction = "Down",
-      size = { Percent = 50 },
-    }),
-  },
-  {
-    key = "k",
-    mods = "CTRL",
-    action = act.SplitPane({
-      direction = "Up",
-      size = { Percent = 50 },
-    }),
-  },
-  {
-    key = "l",
-    mods = "CTRL",
-    action = act.SplitPane({
-      direction = "Right",
-      size = { Percent = 50 },
-    }),
-  },
-  -- move to the pane in the specified direction
-  {
-    key = "h",
-    mods = "ALT",
-    action = act.ActivatePaneDirection("Left"),
-  },
-  {
-    key = "j",
-    mods = "ALT",
-    action = act.ActivatePaneDirection("Down"),
-  },
-  {
-    key = "k",
-    mods = "ALT",
-    action = act.ActivatePaneDirection("Up"),
-  },
-  {
-    key = "l",
-    mods = "ALT",
-    action = act.ActivatePaneDirection("Right"),
-  },
-}
+config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 2000 }
+
+-- merge all keys config
+local keys = require("keymaps")
+
+config.keys = config.keys or {}
+
+for _, key in ipairs(keys) do
+  table.insert(config.keys, key)
+end
+
+-- merge all key tables config
+local key_tables = require("key_tables")
+
+config.key_tables = config.key_tables or {}
+
+for name, key_bindings in pairs(key_tables) do
+  config.key_tables[name] = key_bindings
+end
 
 if wezterm.target_triple == "x86_64-pc-windows-msvc" then
-  config.default_domain = "WSL:Ubuntu"
+  config.default_prog = { "D:\\Application\\Git\\bin\\bash.exe", "--login", "-i" }
+  config.wsl_domains = {
+    {
+      name = "wsl",
+      distribution = "Ubuntu",
+      username = "seika",
+      default_cwd = "~",
+      default_prog = { "zsh" },
+    },
+  }
 end
 
 -- Finally, return the configuration to wezterm:
