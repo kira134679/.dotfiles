@@ -1,4 +1,5 @@
-local act = require("wezterm.action")
+local wezterm = require("wezterm")
+local act = wezterm.action
 
 return {
   resize_pane = {
