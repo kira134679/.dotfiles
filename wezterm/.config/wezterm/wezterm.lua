@@ -7,7 +7,7 @@ local config = wezterm.config_builder()
 -- This is where you actually apply your config choices.
 
 -- For example, changing the initial geometry for new windows:
-if wezterm.target_triple == "x86_64-apple-darwin" then
+if wezterm.target_triple == "x86_64-apple-darwin" or wezterm.target_triple == "aarch64-apple-darwin" then
   config.initial_cols = 90
   config.font_size = 14
 else
