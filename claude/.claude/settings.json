@@ -22,5 +22,10 @@
     "ask": [],
     "defaultMode": "default"
   },
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline.sh",
+    "refreshInterval": 10
+  },
   "editorMode": "vim"
 }
